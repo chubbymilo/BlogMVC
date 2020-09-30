@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using BlogMVC.Data.Repository;
 using Microsoft.Extensions.Options;
 using BlogMVC.Data.FileManager;
+using Westwind.AspNetCore.Markdown;
 
 namespace BlogMVC
 {
@@ -42,7 +43,8 @@ namespace BlogMVC
             })
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
-            services.AddControllersWithViews();
+            services.AddMarkdown();
+            services.AddControllersWithViews().AddApplicationPart(typeof(MarkdownPageProcessorMiddleware).Assembly);
             services.AddRazorPages();
             services.AddTransient<IRepository, Repository>();
             services.AddTransient<IFileManager, FileManager>();
@@ -63,6 +65,7 @@ namespace BlogMVC
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+            app.UseMarkdown();
             app.UseStaticFiles();
 
             app.UseRouting();

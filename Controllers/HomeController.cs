@@ -3,6 +3,7 @@ using BlogMVC.Data.Repository;
 using BlogMVC.Models;
 using BlogMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
@@ -15,14 +16,14 @@ namespace BlogMVC.Controllers
         private readonly ILogger<HomeController> _logger;
         private IRepository _context;
         private IFileManager _fileManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public HomeController(ILogger<HomeController> logger, IRepository context, IFileManager fileManager)
+        public HomeController(ILogger<HomeController> logger, IRepository context, IFileManager fileManager,UserManager<IdentityUser> userManager)
         {
             _logger = logger;
             _context = context;
             _fileManager = fileManager;
-
-
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -58,6 +59,7 @@ namespace BlogMVC.Controllers
             {
                 Id = postVm.Id,
                 Body = postVm.Body,
+                Description = postVm.Description,
                 Title = postVm.Title,
                 Image = await _fileManager.SaveImage(postVm.Image)
             };
@@ -77,7 +79,7 @@ namespace BlogMVC.Controllers
             return View(_context.GetAllPosts());
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         public IActionResult Edit(int id)
         {
             Post post = _context.GetPost(id);
@@ -86,22 +88,33 @@ namespace BlogMVC.Controllers
             var newPost = new PostViewModel
             {
                 Id = post.Id,
+                Description = post.Description,
                 Title = post.Title,
-                Body = post.Body,
+                Body = post.Body
             };
             return View(newPost);
         }
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
        public async Task<IActionResult> Edit(PostViewModel postVm)
         {
-            Post post = new Post
+            Post old_post = _context.GetPost(postVm.Id);
+            if (!postVm.Title.Equals(old_post.Title))
             {
-                Id = postVm.Id,
-                Title = postVm.Title,
-                Body = postVm.Body,
-                Image = await _fileManager.SaveImage(postVm.Image)
-            };
-            _context.UpdatePost(post);
+                old_post.Title = postVm.Title;
+            }
+            if (!postVm.Description.Equals(old_post.Description))
+            {
+                old_post.Description = postVm.Description;
+            }
+            if (!postVm.Body.Equals(old_post.Body))
+            {
+                old_post.Body = postVm.Body;
+            }
+            if (postVm.Image != null)
+            {
+                old_post.Image = await _fileManager.SaveImage(postVm.Image);
+            }
+            _context.UpdatePost(old_post);
             if (await _context.SaveChangeAsync())
             {
                 return RedirectToAction("List");
@@ -117,13 +130,13 @@ namespace BlogMVC.Controllers
             return View(_context.GetPost(id));
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             return View(_context.GetPost(id));
         }
 
-        [HttpPost, ActionName("Delete")]
+        [HttpPost, ActionName("Delete"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             _context.RemovePost(id);

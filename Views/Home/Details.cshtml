@@ -12,13 +12,13 @@
         @if (User.IsInRole("Admin"))
         {
             <div>
-                <a asp-action="List" class="btn btn-primary mb-2">Back to List</a>
+                <a asp-action="Index" class="btn btn-primary mb-2">Back to List</a>
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark mb-2">Edit</a>
             </div>
         }
         else
         {
-            <a asp-action="List" class="btn btn-primary mb-2">Back to List</a>
+            <a asp-action="Index" class="btn btn-primary mb-2">Back to List</a>
         }
         <p id="postContainer">@Markdown.ParseHtmlString(Model.Body)</p>
         @if (!string.IsNullOrEmpty(Model.Image))

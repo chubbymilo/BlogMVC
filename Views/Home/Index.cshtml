@@ -1,8 +1,101 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<BlogMVC.Models.Post>
+
+@{
+    ViewData["Title"] = "List";
+}
+    <div class="container">
+        @if (User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-action="Create" class="btn btn-dark">Create New</a>
+            </p>
+        }
+        @foreach (var item in Model)
+        {
+            <div class="card mt-4">
+                <div class="card-body">
+                <h3 class="card-title ml-2">@item.Title</h3>
+                <div class="card-subtitle text-muted m-2">@item.Created</div>
+                <div class="card-text ml-2">@item.Description</div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark mt-2">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mt-2">Delete</a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+                }
+                    </div>
+            </div>
+        }
+    </div>
+
+
+@*
+<h1>List</h1>
+@if (User.IsInRole("Admin"))
+{
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Body)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Image)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Created)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Body)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Created)
+            </td>
+            @if (User.IsInRole("Admin"))
+            {
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+            }
+            else
+            {
+        <td>  <a asp-action="Details" asp-route-id="@item.Id">Details</a> </td>
+            }
+        </tr>          
+            }
+    </tbody>
+</table>
+*@

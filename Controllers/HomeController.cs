@@ -28,7 +28,7 @@ namespace BlogMVC.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            return View(_context.GetAllPosts());
         }
 
         public IActionResult Privacy()
@@ -66,7 +66,7 @@ namespace BlogMVC.Controllers
             _context.AddPost(post);
             if (await _context.SaveChangeAsync())
             {
-                return RedirectToAction("List");
+                return RedirectToAction("Index");
             }
             else
             {
@@ -117,7 +117,7 @@ namespace BlogMVC.Controllers
             _context.UpdatePost(old_post);
             if (await _context.SaveChangeAsync())
             {
-                return RedirectToAction("List");
+                return RedirectToAction("Index");
             }
             else
             {
@@ -145,7 +145,7 @@ namespace BlogMVC.Controllers
             if (await _context.SaveChangeAsync())
             {
                 _fileManager.RemoveImage(path);
-                return RedirectToAction("List");
+                return RedirectToAction("Index");
             }
             else
             {

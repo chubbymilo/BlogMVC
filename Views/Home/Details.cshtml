@@ -4,57 +4,95 @@
     ViewData["Title"] = "Details";
 }
 
-<h1>Details</h1>
+    <div class="container" id="postContainer">
+        <div class="h1 text-center">@Html.DisplayFor(model => model.Title)</div>
+        <div class="h6 text-center">@Html.DisplayFor(model => model.Created)</div>
 
-<div>
-    <h4>Post</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Title)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Title)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Body)
-        </dt>
-        <dd class="col-sm-10">
-            @Markdown.ParseHtmlString(Model.Body)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Image)
-        </dt>
-        <dd class="col-sm-10">
-            @if (!string.IsNullOrEmpty(Model.Image))
-            {
-                var image_path = $"/Image/{Model.Image}";
-                <img src="@image_path" />
-            }
 
-            @Html.DisplayFor(model => model.Image)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Created)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Created)
-        </dd>
-    </dl>
-</div>
-@if (User.IsInRole("Admin"))
-{
+        @if (User.IsInRole("Admin"))
+        {
+            <div>
+                <a asp-action="List" class="btn btn-primary mb-2">Back to List</a>
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-dark mb-2">Edit</a>
+            </div>
+        }
+        else
+        {
+            <a asp-action="List" class="btn btn-primary mb-2">Back to List</a>
+        }
+        <p id="postContainer">@Markdown.ParseHtmlString(Model.Body)</p>
+        @if (!string.IsNullOrEmpty(Model.Image))
+        {
+            var image_path = $"/Image/{Model.Image}";
+            <style>
+                #postContainer {
+                    background-image: url("@image_path");
+                    background-size: cover;
+                    background-repeat: no-repeat;
+                    background-position: center
+                }
+            </style>
+        }
+
+
+    </div>
+
+
+
+
+@*
+    <h1>Details</h1>
+
     <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
-        </div>
-}
-<div>
+        <h4>Post</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Title)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Title)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Description)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Description)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Body)
+            </dt>
+            <dd class="col-sm-10">
+                @Markdown.ParseHtmlString(Model.Body)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Image)
+            </dt>
+            <dd class="col-sm-10">
+                @if (!string.IsNullOrEmpty(Model.Image))
+                {
+                    var image_path = $"/Image/{Model.Image}";
+                    <img src="@image_path" />
+                }
 
-    <a asp-action="List">Back to List</a>
-</div>
+                @Html.DisplayFor(model => model.Image)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Created)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Created)
+            </dd>
+        </dl>
+    </div>
+    @if (User.IsInRole("Admin"))
+    {
+        <div>
+        <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a>
+            </div>
+    }
+    <div>
+
+        <a asp-action="List">Back to List</a>
+    </div>
+*@

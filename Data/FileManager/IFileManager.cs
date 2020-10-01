@@ -12,6 +12,7 @@ namespace BlogMVC.Data.FileManager
         Task<string> SaveImage(IFormFile image);
 
         FileStream ImageStream(string image);
+        void RemoveImage(string fileName);
     }
 
 }

@@ -139,9 +139,12 @@ namespace BlogMVC.Controllers
         [HttpPost, ActionName("Delete"), Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            string path = _context.GetPost(id).Image;
             _context.RemovePost(id);
+            
             if (await _context.SaveChangeAsync())
             {
+                _fileManager.RemoveImage(path);
                 return RedirectToAction("List");
             }
             else

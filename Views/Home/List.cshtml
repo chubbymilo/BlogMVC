@@ -3,7 +3,37 @@
 @{
     ViewData["Title"] = "List";
 }
+    <div class="container">
+        @if (User.IsInRole("Admin"))
+        {
+            <p>
+                <a asp-action="Create" class="btn btn-dark">Create New</a>
+            </p>
+        }
+        @foreach (var item in Model)
+        {
+            <div class="card mt-4">
+                <div class="card-body">
+                <h3 class="card-title ml-2">@item.Title</h3>
+                <div class="card-subtitle text-muted m-2">@item.Created</div>
+                <div class="card-text ml-2">@item.Description</div>
+                @if (User.IsInRole("Admin"))
+                {
+                    <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark mt-2">Edit</a>
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mt-2">Delete</a>
+                }
+                else
+                {
+                    <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+                }
+                    </div>
+            </div>
+        }
+    </div>
 
+
+@*
 <h1>List</h1>
 @if (User.IsInRole("Admin"))
 {
@@ -11,6 +41,7 @@
     <a asp-action="Create">Create New</a>
 </p>
 }
+
 <table class="table">
     <thead>
         <tr>
@@ -67,4 +98,4 @@
             }
     </tbody>
 </table>
-
+*@

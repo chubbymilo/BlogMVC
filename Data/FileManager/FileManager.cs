@@ -18,6 +18,10 @@ namespace BlogMVC.Data.FileManager
         public async Task<string> SaveImage(IFormFile image)
 
         {
+            if (image == null)
+            {
+                return null;
+            }
             var path_save = Path.Combine(_imagePath);
             if (!Directory.Exists(path_save))
             {
@@ -36,6 +40,21 @@ namespace BlogMVC.Data.FileManager
         public FileStream ImageStream(string image)
         {
             return new FileStream(Path.Combine(_imagePath, image), FileMode.Open, FileAccess.Read);
+        }
+
+        public void RemoveImage(string fileName)
+        {
+            try
+            {
+                if (fileName != null)
+                {
+                    File.Delete(Path.Combine(_imagePath,fileName));
+                }
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
     }
 }

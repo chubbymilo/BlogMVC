@@ -14,5 +14,6 @@ namespace BlogMVC.Data
         {
         }
         public DbSet<BlogMVC.Models.Post> Post { get; set; }
+        public DbSet<BlogMVC.Models.TodoItem> TodoItem { get; set; }
     }
 }

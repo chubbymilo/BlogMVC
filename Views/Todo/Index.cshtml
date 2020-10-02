@@ -1,0 +1,58 @@
+﻿@model IEnumerable<BlogMVC.ViewModels.TodoItemViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+<h1 class="text-center">To-do List</h1>
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-dark">Create New</a>
+    </p>
+}
+<div class="accordion" id="accordionExample">
+    @{
+        int i = 0;
+    }
+    @foreach (var item in Model)
+    {
+        <div class="card">
+            <div class="card-header" id="headingOne">
+                <h2 class="mb-0">
+                    <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" href="@string.Concat("#A",i.ToString())" aria-expanded="false" aria-controls="collapseTwo">
+                        <h3>@item.Task<span class="badge badge-secondary ml-2">@item.Status</span></h3>
+                    </button>
+                </h2>
+            </div>
+
+            <div id="@string.Concat("A",i.ToString())" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+                <div class="card-body">
+                    <p class="h3 d-inline mr-3"> @Html.DisplayNameFor(model => model.Detail):</p> <p>@item.Detail</p>
+
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Status):</p>
+                    <p class="ml-4">@item.Status</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Created):</p>
+                    <p class="ml-4">@item.Created</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.StartWorking):</p>
+                    <p class="ml-4">@item.StartWorking</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Finished):</p>
+                    <p class="ml-4">@item.Finished</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.PlanDuration):</p>
+                    <p class="ml-4">@item.PlanDuration</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.WorkDuration):</p>
+                    <p class="ml-4">@item.WorkDuration</p>
+                    <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.TotalDuration):</p>
+                    <p class="ml-4">@item.TotalDuration</p>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a class="btn btn-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                    <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+        i++;
+    }
+
+</div>
+

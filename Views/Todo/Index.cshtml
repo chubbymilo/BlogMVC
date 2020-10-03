@@ -27,22 +27,30 @@
 
             <div id="@string.Concat("A",i.ToString())" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
-                    <p class="h3 d-inline mr-3"> @Html.DisplayNameFor(model => model.Detail):</p> <p>@item.Detail</p>
+                    <p class="h3 d-inline mr-3"> @Html.DisplayNameFor(model => model.Detail):</p>
+                    <p class="ml-4">@item.Detail</p>
 
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Status):</p>
                     <p class="ml-4">@item.Status</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Created):</p>
                     <p class="ml-4">@item.Created</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.StartWorking):</p>
                     <p class="ml-4">@item.StartWorking</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.Finished):</p>
                     <p class="ml-4">@item.Finished</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.PlanDuration):</p>
                     <p class="ml-4">@item.PlanDuration</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.WorkDuration):</p>
                     <p class="ml-4">@item.WorkDuration</p>
+
                     <p class="h3 d-inline mr-3">@Html.DisplayNameFor(model => model.TotalDuration):</p>
                     <p class="ml-4">@item.TotalDuration</p>
+
                     @if (User.IsInRole("Admin"))
                     {
                         <a class="btn btn-dark" asp-action="Edit" asp-route-id="@item.Id">Edit</a>

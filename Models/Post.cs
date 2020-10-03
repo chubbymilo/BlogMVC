@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TimeZoneConverter;
 
 namespace BlogMVC.Models
 {
@@ -12,6 +13,7 @@ namespace BlogMVC.Models
         public string Description { set; get; }
         public string Body { set; get; }
         public string Image { set; get; }
-        public DateTime Created { set; get; } = DateTime.Now;
+        public DateTime Created { set; get; } = TimeZoneInfo
+            .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time"));
     }
 }

@@ -9,6 +9,7 @@ using BlogMVC.Data;
 using BlogMVC.Models;
 using BlogMVC.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using TimeZoneConverter;
 
 namespace BlogMVC.Controllers
 {
@@ -53,27 +54,44 @@ namespace BlogMVC.Controllers
                 {
                     todoItemVM.Status = "In Progress";
                 }
-                if (item.StartWorking == null)
+
+              if (item.StartWorking == null && item.Finished == null)
                 {
-                    todoItemVM.PlanDuration = 0;
+                    todoItemVM.PlanDuration = "N/A";
+                    todoItemVM.WorkDuration = "N/A";
+                    todoItemVM.TotalDuration = "N/A";
                 }
-                else
-                {
-                    todoItemVM.PlanDuration = ((TimeSpan)(item.StartWorking - item.Created)).Days;
-                }
-                if (item.Finished == null)
-                {
-                    todoItemVM.WorkDuration = 0;
-                }
-                else
-                {
-                    todoItemVM.WorkDuration = ((TimeSpan)(item.Finished - item.StartWorking)).Days;
-                }
+
                 if (item.StartWorking != null && item.Finished != null)
                 {
-                    todoItemVM.TotalDuration = ((TimeSpan)(item.Finished - item.Created)).Days;
+                    var plan_duration = (TimeSpan)(item.StartWorking - item.Created);
+                    var work_duration = (TimeSpan)(item.Finished - item.StartWorking);
+                    var total_duration = (TimeSpan)(item.Finished - item.Created);
+                    string result_duration = FormatTime(work_duration);
+                    string result_duration1 = FormatTime(plan_duration);
+                    string result_duration2 = FormatTime(total_duration);
+
+                    todoItemVM.WorkDuration = result_duration;
+                    todoItemVM.PlanDuration = result_duration1;
+                    todoItemVM.TotalDuration = result_duration2;
                 }
-              
+                if (item.StartWorking != null && item.Finished == null)
+                    {
+                    var plan_duration = (TimeSpan)(item.StartWorking - item.Created);
+                    string result_duration = FormatTime(plan_duration);
+                    todoItemVM.PlanDuration = result_duration;
+                    todoItemVM.TotalDuration = "N/A";
+                    todoItemVM.WorkDuration = "N/A";
+                    }
+                if (item.StartWorking == null && item.Finished != null)
+                    {
+                    var total_duration = (TimeSpan)(item.Finished - item.Created);
+                    string result_duration = FormatTime(total_duration);
+                    todoItemVM.WorkDuration = result_duration;
+                    todoItemVM.PlanDuration = "N/A";
+                    todoItemVM.TotalDuration = result_duration;
+                    }
+                
                 todoItemsVM.Add(todoItemVM);
             }
             
@@ -110,12 +128,12 @@ namespace BlogMVC.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost, Authorize(Roles="Admin")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Created,Task,Detail,IsComplete,IsWorkingOn,StartWorking,Finished,Status")] TodoItemViewModel todoItemVM)
+        public async Task<IActionResult> Create([Bind("Id,Created,Task,Detail,IsComplete,IsWorkingOn,StartWorking,Finished")] TodoItemViewModel todoItemVM)
         {
-            TodoItem todoItem;
-            if (todoItemVM.Status == "Pending")
-            {
-                todoItemVM.Created = DateTime.Now;
+                TodoItem todoItem;
+           
+                todoItemVM.Created = TimeZoneInfo
+            .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time")); ;
                 todoItem = new TodoItem
                 {
                     Id= todoItemVM.Id,
@@ -125,55 +143,7 @@ namespace BlogMVC.Controllers
                     IsComplete = false,
                     IsWorkingOn = false,
                 };
-            } else if (todoItemVM.Status == "In Progress")
-            {
-                todoItem = new TodoItem
-                {
-                    Id = todoItemVM.Id,
-                    Task = todoItemVM.Task,
-                    Detail = todoItemVM.Detail,
-                    IsComplete = false,
-                    IsWorkingOn = true,
-                    StartWorking = todoItemVM.StartWorking,
-                };
-                if (todoItemVM.Created == null)
-                {
-                    todoItem.Created = todoItemVM.StartWorking;
-                }
-                if (todoItemVM.StartWorking == null)
-                {
-                    todoItem.Created = DateTime.Now;
-                    todoItem.StartWorking = todoItem.Created;
-                }
-            }
-            else
-            {
-               todoItem = new TodoItem
-                {
-                    Id = todoItemVM.Id,
-                    Task = todoItemVM.Task,
-                    Detail = todoItemVM.Detail,
-                    IsComplete = true,
-                    IsWorkingOn = true,
-                    StartWorking = todoItemVM.StartWorking,
-                    Created = todoItemVM.Created,
-                    Finished = todoItemVM.Finished,
-                };
-                if (todoItemVM.Created == null)
-                {
-                    todoItem.Created = DateTime.Now;
-                }
-                if (todoItemVM.StartWorking == null)
-                {
-                    todoItem.StartWorking = todoItem.Created;
-                }
-                if (todoItemVM.Finished == null)
-                {
-                    todoItem.Finished = todoItem.Created;
-                }
-              
-            }
-        
+          
             if (ModelState.IsValid)
             {
                 _context.Add(todoItem);
@@ -246,7 +216,8 @@ namespace BlogMVC.Controllers
             if (todoItemVM.Status == "Pending")
             {
               
-                todoItem.Created = DateTime.Now;
+                todoItem.Created = TimeZoneInfo
+            .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time")); ;
                 todoItem.Task = todoItemVM.Task;
                 todoItem.Detail = todoItemVM.Detail;
                 todoItem.IsComplete = false;
@@ -261,7 +232,8 @@ namespace BlogMVC.Controllers
                 todoItem.Detail = todoItemVM.Detail;
                 todoItem.IsComplete = false;
                 todoItem.IsWorkingOn = true;
-                todoItem.StartWorking = DateTime.Now;
+                todoItem.StartWorking = TimeZoneInfo
+            .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time")); ;
                 todoItem.Finished = null;                
             }
 
@@ -271,8 +243,15 @@ namespace BlogMVC.Controllers
                 todoItem.Detail = todoItemVM.Detail;
                 todoItem.IsComplete = true;
                 todoItem.IsWorkingOn = true;
-                todoItem.Finished = DateTime.Now;
+                todoItem.Finished = TimeZoneInfo
+            .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time")); ;
+                if (todoItem.StartWorking == null)
+                {
+                    todoItem.StartWorking = todoItem.Created;
                 }
+            }
+                
+            
        
             if (ModelState.IsValid)
             {
@@ -329,6 +308,57 @@ namespace BlogMVC.Controllers
         private bool TodoItemExists(int id)
         {
             return _context.TodoItem.Any(e => e.Id == id);
+        }
+
+        private string FormatTime(TimeSpan duration)
+        {
+            string result_duration = "";
+            int days = (int)Math.Round(duration.TotalDays);
+            int hours = (int)Math.Round(duration.TotalHours);
+            int minutes = (int)Math.Round(duration.TotalMinutes);
+            if (days > 0)
+            {
+                result_duration += days.ToString();
+                if (days > 1)
+                {
+                    result_duration += " Days";
+                }
+                else
+                {
+                    result_duration += " Day ";
+                }
+            }
+            if (hours > 0)
+            {
+                result_duration += hours;
+                if (hours > 1)
+                {
+                    result_duration += " Hours ";
+                }
+                else
+                {
+                    result_duration += " Hour ";
+                }
+                 
+            }
+            if (minutes > 0)
+            {
+                result_duration += minutes.ToString();
+                if (minutes > 1)
+                {
+                    result_duration += " Minutes ";
+                }
+                else
+                {
+                    result_duration += " Minute ";
+                }
+            
+            }
+            if (String.IsNullOrEmpty(result_duration))
+            {
+                result_duration = "N/A";
+            }
+            return result_duration;
         }
     }
 }

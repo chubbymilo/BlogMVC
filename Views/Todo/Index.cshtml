@@ -10,13 +10,13 @@
         <a asp-action="Create" class="btn btn-dark">Create New</a>
     </p>
 }
-<div class="accordion" id="accordionExample">
+<div class="accordion bg-light" id="accordionExample">
     @{
         int i = 0;
     }
     @foreach (var item in Model)
     {
-        <div class="card border-dark">
+        <div class="card border-dark ">
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" href="@string.Concat("#A",i.ToString())" aria-expanded="false" aria-controls="collapseTwo">

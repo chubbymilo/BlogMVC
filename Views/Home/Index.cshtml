@@ -1,8 +1,15 @@
 ﻿@model IEnumerable<BlogMVC.Models.Post>
 
 @{
-    ViewData["Title"] = "List";
+    ViewData["Title"] = "Home";
 }
+<style>
+    #card {
+       
+        background: rgba(211,211,211,0.5);
+    }
+
+</style>
 <h1 class="text-center">Blog</h1>
 
         @if (User.IsInRole("Admin"))
@@ -13,7 +20,7 @@
         }
         @foreach (var item in Model)
         {
-            <div class="card mt-4 border-dark bg-transparent text-center">
+            <div class="card mt-4 border-dark text-center" id="card">
                 <div class="card-body">
                 <h3 class="card-title">@item.Title</h3>
                 <div class="card-subtitle">@item.Created</div>

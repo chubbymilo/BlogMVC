@@ -3,17 +3,16 @@
 @{
     ViewData["Title"] = "Details";
 }
-<style>
-img{
-  max-width: 100%;
-  height: auto;
-}
-</style>
+    <style>
+    img {
+        max-width: 100%;
+        height: auto;
+    }
+    </style>
 
-<div class="container" id="postContainer">
+<div class="container">
     <div class="h1 text-center">@Html.DisplayFor(model => model.Title)</div>
     <div class="h6 text-center">@Html.DisplayFor(model => model.Created)</div>
-
 
     @if (User.IsInRole("Admin"))
     {
@@ -27,20 +26,6 @@ img{
         <a asp-action="Index" class="btn btn-primary mb-2">Back to List</a>
     }
     <p id="postContainer">@Markdown.ParseHtmlString(Model.Body)</p>
-    @if (!string.IsNullOrEmpty(Model.Image))
-    {
-        var image_path = $"/Image/{Model.Image}";
-        <style>
-                #postContainer {
-                    background-image: url("@image_path");
-                    background-size: cover;
-                    background-repeat: no-repeat;
-                    background-position: center
-                }
-        </style>
-    }
-
-
 </div>
 
 

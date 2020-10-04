@@ -309,51 +309,11 @@ namespace BlogMVC.Controllers
         {
             return _context.TodoItem.Any(e => e.Id == id);
         }
-
+        //result_duration = duration.ToString("d'd 'h'h 'm'm '");
         private string FormatTime(TimeSpan duration)
         {
             string result_duration = "";
-            int days = (int)Math.Round(duration.TotalDays);
-            int hours = (int)Math.Round(duration.TotalHours);
-            int minutes = (int)Math.Round(duration.TotalMinutes);
-            if (days > 0)
-            {
-                result_duration += days.ToString();
-                if (days > 1)
-                {
-                    result_duration += " Days";
-                }
-                else
-                {
-                    result_duration += " Day ";
-                }
-            }
-            if (hours > 0)
-            {
-                result_duration += hours;
-                if (hours > 1)
-                {
-                    result_duration += " Hours ";
-                }
-                else
-                {
-                    result_duration += " Hour ";
-                }
-                 
-            }
-            if (minutes > 0)
-            {
-                result_duration += minutes.ToString();
-                if (minutes > 1)
-                {
-                    result_duration += " Minutes ";
-                }
-                else
-                {
-                    result_duration += " Minute ";
-                }
-            
-            }
+            result_duration = duration.ToString("d' Day 'h' Hour 'm' Minute 's' Second '");
             if (String.IsNullOrEmpty(result_duration))
             {
                 result_duration = "N/A";

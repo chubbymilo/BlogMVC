@@ -13,11 +13,11 @@
         }
         @foreach (var item in Model)
         {
-            <div class="card mt-4">
+            <div class="card mt-4 bg-light">
                 <div class="card-body">
-                <h3 class="card-title ml-2">@item.Title</h3>
-                <div class="card-subtitle text-muted m-2">@item.Created</div>
-                <div class="card-text ml-2">@item.Description</div>
+                <h3 class="card-title text-center">@item.Title</h3>
+                <div class="card-subtitle text-muted text-center">@item.Created</div>
+                <div class="card-text ml-4">@item.Description</div>
                 @if (User.IsInRole("Admin"))
                 {
                     <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark mt-2">Edit</a>

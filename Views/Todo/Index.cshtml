@@ -16,7 +16,7 @@
     }
     @foreach (var item in Model)
     {
-        <div class="card">
+        <div class="card border-dark">
             <div class="card-header" id="headingOne">
                 <h2 class="mb-0">
                     <button class="btn btn-block text-left collapsed" type="button" data-toggle="collapse" href="@string.Concat("#A",i.ToString())" aria-expanded="false" aria-controls="collapseTwo">
@@ -25,7 +25,7 @@
                 </h2>
             </div>
 
-            <div id="@string.Concat("A",i.ToString())" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionExample">
+            <div id="@string.Concat("A",i.ToString())" class="collapse bg-light" aria-labelledby="headingTwo" data-parent="#accordionExample">
                 <div class="card-body">
                     <p class="h3 d-inline mr-3"> @Html.DisplayNameFor(model => model.Detail):</p>
                     <p class="ml-4">@item.Detail</p>

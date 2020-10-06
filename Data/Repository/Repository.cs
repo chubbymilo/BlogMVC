@@ -48,5 +48,15 @@ namespace BlogMVC.Data.Repository
                 return false;
             }
         }
+        public List<string> GetCategories()
+        {
+            List<Category> categories = _context.Category.ToList();
+            List<String> allCategoris = new List<string>();
+            foreach( var item in categories)
+            {
+                allCategoris.Add(item.CategoryName);
+            }
+            return allCategoris;
+        }
     }
 }

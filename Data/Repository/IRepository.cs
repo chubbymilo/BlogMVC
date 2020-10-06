@@ -14,6 +14,8 @@ namespace BlogMVC.Data.Repository
         void RemovePost(int id);
         void UpdatePost(Post post);
 
+        List<string> GetCategories();
+
         Task<bool> SaveChangeAsync();
 
     }

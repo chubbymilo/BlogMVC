@@ -15,5 +15,6 @@ namespace BlogMVC.ViewModels
         public string Body { set; get; }
         [Display(Name = "Background Image")]
         public IFormFile Image { set; get; }
+        public string CategoryName { set; get; }
     }
 }

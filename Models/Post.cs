@@ -15,5 +15,6 @@ namespace BlogMVC.Models
         public string Image { set; get; }
         public DateTime Created { set; get; } = TimeZoneInfo
             .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time"));
+        public string CategoryName { set; get; }
     }
 }

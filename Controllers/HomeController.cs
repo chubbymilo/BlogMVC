@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -49,6 +50,9 @@ namespace BlogMVC.Controllers
         [HttpGet, Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
+
+            List<string> allCategorie =_context.GetCategories();
+            ViewData["categories"] = allCategorie;
             return View();
         }
 
@@ -61,7 +65,8 @@ namespace BlogMVC.Controllers
                 Body = postVm.Body,
                 Description = postVm.Description,
                 Title = postVm.Title,
-                Image = await _fileManager.SaveImage(postVm.Image)
+                Image = await _fileManager.SaveImage(postVm.Image),
+                CategoryName = postVm.CategoryName
             };
             _context.AddPost(post);
             if (await _context.SaveChangeAsync())
@@ -84,13 +89,16 @@ namespace BlogMVC.Controllers
         {
             Post post = _context.GetPost(id);
             ViewData["imagePath"] = post.Image;
+            List<string> allCategorie = _context.GetCategories();
+            ViewData["categories"] = allCategorie;
 
             var newPost = new PostViewModel
             {
                 Id = post.Id,
                 Description = post.Description,
                 Title = post.Title,
-                Body = post.Body
+                Body = post.Body,
+                CategoryName = post.CategoryName
             };
             return View(newPost);
         }
@@ -109,6 +117,10 @@ namespace BlogMVC.Controllers
             if (!postVm.Body.Equals(old_post.Body))
             {
                 old_post.Body = postVm.Body;
+            }
+            if (!postVm.CategoryName.Equals(old_post.CategoryName))
+            {
+                old_post.CategoryName = postVm.CategoryName;
             }
             if (postVm.Image != null)
             {

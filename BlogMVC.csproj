@@ -12,6 +12,8 @@
     <Compile Remove="Data\Migrations\20201002120509_migrate_to_Azure.Designer.cs" />
     <Compile Remove="Data\Migrations\20201002121623_migrate-to-azure.cs" />
     <Compile Remove="Data\Migrations\20201002121623_migrate-to-azure.Designer.cs" />
+    <Compile Remove="Data\Migrations\20201006124800_added-category-to-published-db.cs" />
+    <Compile Remove="Data\Migrations\20201006124800_added-category-to-published-db.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeZoneConverter;
@@ -15,6 +16,8 @@ namespace BlogMVC.Models
         public string Image { set; get; }
         public DateTime Created { set; get; } = TimeZoneInfo
             .ConvertTime(DateTime.UtcNow, TZConvert.GetTimeZoneInfo("New Zealand Standard Time"));
+
+        [Display(Name = "Category")]
         public string CategoryName { set; get; }
     }
 }

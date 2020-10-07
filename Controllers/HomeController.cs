@@ -27,9 +27,18 @@ namespace BlogMVC.Controllers
             _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public IActionResult Index()     
         {
+            List<string> allCategorie = _context.GetCategories();
+            ViewData["categories"] = allCategorie;
             return View(_context.GetAllPosts());
+        }
+
+        public IActionResult GetPostWithCategory(string category)
+        {
+            List<string> allCategorie = _context.GetCategories();
+            ViewData["categories"] = allCategorie;
+            return View(_context.GetAllPostsWithCategory(category));
         }
 
         public IActionResult Privacy()

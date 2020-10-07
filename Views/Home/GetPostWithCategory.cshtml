@@ -1,0 +1,54 @@
+﻿@model IEnumerable<BlogMVC.Models.Post>
+@{
+    ViewData["Title"] = "GetPostWithCategory";
+}
+
+<style>
+    #card {
+        background: rgba(211,211,211,0.5);
+    }
+</style>
+<h1 class="text-center">Posts with @Html.DisplayNameFor(model => model.CategoryName)</h1>
+
+@if (User.IsInRole("Admin"))
+{
+    <p>
+        <a asp-action="Create" class="btn btn-dark">Create a new post</a>
+        <a asp-controller="Categories" asp-action="Create" class="btn btn-dark">Create a new category</a>
+    </p>
+}
+<div class="dropdown">
+    <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        @Html.DisplayNameFor(model => model.CategoryName)
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        @foreach (var item in (List<string>)ViewData["categories"])
+        {
+
+            <a class="dropdown-item" asp-action="GetPostWithCategory" asp-route-category="@item">@item</a>
+        }
+    </div>
+</div>
+@foreach (var item in Model)
+{
+    <div class="card mt-4 border-dark text-center" id="card">
+        <div class="card-body">
+            <a class="btn-secondary mt-2"> @Html.DisplayNameFor(model => model.CategoryName): @item.CategoryName</a>
+            <h3 class="card-title">@item.Title</h3>
+            <div class="card-subtitle">@item.Created</div>
+            <div class="card-text">@item.Description</div>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-dark mt-2">Edit</a>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger mt-2">Delete</a>
+            }
+            else
+            {
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary mt-2">Read More</a>
+            }
+        </div>
+    </div>
+}
+
+

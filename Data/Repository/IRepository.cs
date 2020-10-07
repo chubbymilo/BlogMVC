@@ -15,6 +15,7 @@ namespace BlogMVC.Data.Repository
         void UpdatePost(Post post);
 
         List<string> GetCategories();
+        List<Post> GetAllPostsWithCategory(string category);
 
         Task<bool> SaveChangeAsync();
 

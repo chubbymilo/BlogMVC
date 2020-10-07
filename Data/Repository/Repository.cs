@@ -58,5 +58,12 @@ namespace BlogMVC.Data.Repository
             }
             return allCategoris;
         }
+
+        public List<Post> GetAllPostsWithCategory(string category)
+        {
+
+            return _context.Post
+                .Where(p => p.CategoryName == category).ToList();
+        }
     }
 }
